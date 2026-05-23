@@ -734,31 +734,40 @@
       }
 
       .word-card {
-        grid-template-columns: minmax(70px, 1fr) minmax(90px, 1.1fr) minmax(44px, 0.55fr) 42px;
-        gap: 8px;
-      }
-
-      .word-card-actions {
-        justify-content: flex-end;
+        grid-template-columns: 1fr 46px;
+        gap: 2px 10px;
       }
 
       .word-card strong {
+        grid-column: 1;
         font-size: 1.36rem;
       }
 
-      .word-card .pronunciation,
-      .word-card span {
+      .word-card .pronunciation {
+        grid-column: 1;
         font-size: 1.14rem;
       }
 
+      .word-card span {
+        grid-column: 1;
+        font-size: 1.14rem;
+      }
+
+      .word-card-actions {
+        grid-column: 2;
+        grid-row: 1 / -1;
+        align-self: center;
+        justify-content: center;
+      }
+
       .pronounce-button {
-        width: 38px;
-        height: 38px;
+        width: 42px;
+        height: 42px;
       }
 
       .pronounce-icon {
-        width: 18px;
-        height: 18px;
+        width: 20px;
+        height: 20px;
       }
 
       .grammar-row {
