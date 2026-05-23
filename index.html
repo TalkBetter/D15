@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TalkBetter Week 15 Parts 1-4</title>
+  <style>
+    :root {
+      --bg:
+        radial-gradient(circle at 14% 10%, rgba(59, 130, 246, 0.16), transparent 24%),
+        radial-gradient(circle at 86% 14%, rgba(251, 191, 36, 0.18), transparent 24%),
+        radial-gradient(circle at 52% 100%, rgba(249, 115, 22, 0.08), transparent 26%),
+        linear-gradient(180deg, #fff9ef 0%, #f9fcff 48%, #eef6ff 100%);
+      --card: rgba(255, 255, 255, 0.9);
+      --line: rgba(93, 115, 153, 0.18);
+      --ink: #15304a;
+      --muted: #607390;
+      --teal: #0f766e;
+      --orange: #f97316;
+      --shadow: 0 24px 56px rgba(73, 107, 159, 0.14);
+      --radius-xl: 34px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --ui: "Aptos", "Trebuchet MS", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      --head: "Palatino Linotype", "Book Antiqua", "Times New Roman", serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 19px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--ui);
+      color: var(--ink);
+      background: var(--bg);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      width: min(1160px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 22px 0 48px;
+    }
+
+    .hero,
+    .part-card,
+    .sub-card,
+    .story-box,
+    .word-card,
+    .diagram-frame,
+    .grammar-table,
+    .example-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: var(--card);
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 26px;
+      background:
+        radial-gradient(circle at top right, rgba(59, 130, 246, 0.16), transparent 28%),
+        radial-gradient(circle at left bottom, rgba(251, 191, 36, 0.14), transparent 30%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.97), rgba(255, 248, 236, 0.94));
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      margin: 0;
+      color: #12253b;
+    }
+
+    h1,
+    h2 {
+      font-family: var(--head);
+    }
+
+    h1 {
+      font-size: clamp(3rem, 5.2vw, 4.8rem);
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 3.7vw, 2.8rem);
+      line-height: 1.05;
+    }
+
+    h3 {
+      font-size: 1.42rem;
+      line-height: 1.3;
+    }
+
+    h4 {
+      font-size: 1.14rem;
+      line-height: 1.35;
+    }
+
+    p,
+    li {
+      margin: 0;
+      line-height: 1.58;
+    }
+
+    .hero-copy p,
+    .card-copy,
+    .zh,
+    .muted {
+      color: var(--muted);
+    }
+
+    .hero-copy p {
+      margin-top: 10px;
+      font-size: 1.18rem;
+    }
+
+    .hero-links,
+    .part-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .jump-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 16px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #0f766e, #0284c7);
+      color: #fff;
+      font-size: 1.06rem;
+      font-weight: 900;
+      box-shadow: 0 14px 28px rgba(2, 132, 199, 0.2);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .game-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 64px;
+      padding: 16px 24px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #f97316, #dc2626);
+      color: #fff;
+      font-size: 1.26rem;
+      font-weight: 900;
+      box-shadow: 0 18px 34px rgba(220, 38, 38, 0.24);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+
+    .jump-link:hover,
+    .footer-link:hover,
+    .game-link:hover {
+      transform: translateY(-1px);
+    }
+
+    .part-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .audio-chip {
+      padding: 11px 16px;
+      border: 0;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #0f766e, #0284c7);
+      color: #fff;
+      font: inherit;
+      font-size: 1rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 14px 28px rgba(2, 132, 199, 0.18);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+    }
+
+    .audio-chip:hover {
+      transform: translateY(-1px);
+    }
+
+    .audio-chip[data-state="paused"] {
+      background: linear-gradient(135deg, #2563eb, #38bdf8);
+      box-shadow: 0 14px 28px rgba(37, 99, 235, 0.18);
+    }
+
+    .audio-chip[data-state="playing"] {
+      background: linear-gradient(135deg, #ea580c, #f97316);
+      box-shadow: 0 14px 28px rgba(249, 115, 22, 0.2);
+    }
+
+    .audio-chip:disabled {
+      opacity: 0.52;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .parts {
+      display: grid;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .part-card {
+      position: relative;
+      overflow: hidden;
+      padding: 20px;
+    }
+
+    .part-card.is-playing {
+      border-color: rgba(99, 102, 241, 0.28);
+      box-shadow: 0 28px 58px rgba(59, 130, 246, 0.16);
+    }
+
+    .part-card.is-paused {
+      border-color: rgba(249, 115, 22, 0.28);
+      box-shadow: 0 24px 50px rgba(249, 115, 22, 0.12);
+    }
+
+    .part-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto auto 24px;
+      width: 104px;
+      height: 8px;
+      border-radius: 0 0 16px 16px;
+      background: linear-gradient(90deg, #f59e0b, #3b82f6);
+      opacity: 0.92;
+    }
+
+    .part-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+
+    .part-title p {
+      margin-top: 8px;
+    }
+
+    .part-main {
+      display: grid;
+      gap: 14px;
+    }
+
+    .pattern-grid,
+    .example-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .pair-grid {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: 1fr;
+      counter-reset: learning-item;
+    }
+
+    .pair-card {
+      counter-increment: learning-item;
+      position: relative;
+      display: grid;
+      gap: 6px;
+      border: 1px solid rgba(93, 115, 153, 0.14);
+      border-radius: 22px;
+      padding: 14px 16px 14px 68px;
+      background:
+        radial-gradient(circle at top right, rgba(14, 165, 233, 0.1), transparent 32%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(242, 248, 255, 0.94));
+      box-shadow: 0 14px 30px rgba(73, 107, 159, 0.08);
+    }
+
+    .pair-card::before {
+      content: counter(learning-item);
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      width: 1.9rem;
+      height: 1.9rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: #2563eb;
+      color: #ffffff;
+      font-size: 0.92rem;
+      font-weight: 900;
+      box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.12);
+    }
+
+    .pair-heading {
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 900;
+      color: var(--orange);
+    }
+
+    #part2 .pair-heading {
+      font-size: 1.16rem;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--teal);
+    }
+
+    #part2 .translation {
+      font-size: 1.16rem;
+      line-height: 1.46;
+    }
+
+    #part2 .prompt {
+      display: block;
+      margin-bottom: 4px;
+      color: #dc2626;
+      font-size: 1.52rem;
+      font-weight: 900;
+      line-height: 1.3;
+    }
+
+    #part4 h3 {
+      font-size: 1.56rem;
+    }
+
+    #part3 h3 {
+      font-size: 1.56rem;
+    }
+
+    #part3 .story-text,
+    #part3 .translation,
+    #part3 .sentence,
+    #part3 .question-item h4 {
+      font-size: 1.18rem;
+      line-height: 1.62;
+    }
+
+    #part4 .grammar-point,
+    #part4 .grammar-cell,
+    #part4 .bullet-list {
+      font-size: 1.18rem;
+      line-height: 1.62;
+    }
+
+    #part4 .grammar-row strong {
+      font-size: 1.14rem;
+    }
+
+    .qa-block {
+      display: grid;
+      gap: 4px;
+    }
+
+    .pattern-grid .sub-card:first-child {
+      grid-column: 1 / -1;
+    }
+
+    .story-layout,
+    .body-layout {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+    }
+
+    .sub-card,
+    .story-box,
+    .word-card,
+    .diagram-frame,
+    .grammar-table,
+    .example-card {
+      padding: 16px 18px;
+      border-radius: var(--radius-lg);
+      background:
+        radial-gradient(circle at top right, rgba(14, 165, 233, 0.08), transparent 34%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(242, 248, 255, 0.95));
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 2rem;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.12);
+      color: #2563eb;
+      font-size: 0.84rem;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .prompt,
+    .answer,
+    .sentence,
+    .translation,
+    .story-text,
+    .grammar-point,
+    .word-line {
+      display: block;
+    }
+
+    .prompt,
+    .answer {
+      font-size: 1.02rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .answer {
+      color: var(--teal);
+      margin-top: 8px;
+    }
+
+    .sentence {
+      margin-top: 8px;
+      font-size: 1.38rem;
+      font-weight: 900;
+      color: var(--ink);
+      line-height: 1.3;
+    }
+
+    .translation,
+    .story-text,
+    .grammar-point,
+    .word-line,
+    .bullet-list {
+      margin-top: 6px;
+      font-size: 1.08rem;
+      color: var(--muted);
+    }
+
+    .bullet-list {
+      padding-left: 20px;
+    }
+
+    .bullet-list li + li {
+      margin-top: 8px;
+    }
+
+    .story-box p + p,
+    .sub-card p + p {
+      margin-top: 8px;
+    }
+
+    .question-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .question-item {
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(93, 115, 153, 0.14);
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 14px 30px rgba(73, 107, 159, 0.08);
+    }
+
+    .question-item h4 {
+      margin-bottom: 6px;
+      color: var(--orange);
+    }
+
+    .question-item .sentence {
+      font-size: 1.18rem;
+    }
+
+    .word-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .word-card {
+      display: grid;
+      grid-template-columns: minmax(76px, 0.9fr) minmax(96px, 1fr) minmax(44px, 0.55fr) 44px;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .word-card strong {
+      display: block;
+      font-size: 1.22rem;
+      color: #1e3a5f;
+      white-space: nowrap;
+    }
+
+    .word-card-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .word-card .pronunciation {
+      display: block;
+      margin-top: 0;
+      color: var(--teal);
+      font-size: 1.04rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .pronounce-button {
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 999px;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0f766e, #0284c7);
+      color: #fff;
+      font: inherit;
+      cursor: pointer;
+      box-shadow: 0 12px 24px rgba(2, 132, 199, 0.18);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+    }
+
+    .pronounce-icon {
+      width: 20px;
+      height: 20px;
+      display: block;
+      fill: currentColor;
+    }
+
+    .pronounce-button:hover {
+      transform: translateY(-1px);
+    }
+
+    .pronounce-button:disabled {
+      opacity: 0.52;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .word-card span {
+      display: block;
+      margin-top: 0;
+      color: var(--muted);
+      font-size: 1.04rem;
+      white-space: nowrap;
+    }
+
+    .diagram-frame img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .grammar-table {
+      display: grid;
+      gap: 10px;
+    }
+
+    .grammar-row {
+      display: grid;
+      grid-template-columns: minmax(110px, 0.8fr) minmax(110px, 0.8fr) minmax(0, 1.3fr);
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px dashed rgba(93, 115, 153, 0.18);
+      align-items: start;
+    }
+
+    .grammar-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .grammar-row strong {
+      color: #1e3a5f;
+    }
+
+    .grammar-cell {
+      display: block;
+    }
+
+    .page-footer {
+      position: fixed;
+      left: 18px;
+      right: 18px;
+      bottom: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      z-index: 30;
+      pointer-events: none;
+    }
+
+    .footer-link,
+    .back-to-top-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 13px 18px;
+      border-radius: 999px;
+      color: #fff;
+      font-size: 1.04rem;
+      font-weight: 900;
+      text-decoration: none;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      pointer-events: auto;
+    }
+
+    .footer-link {
+      background: linear-gradient(135deg, #0f766e, #0284c7);
+      box-shadow: 0 14px 28px rgba(2, 132, 199, 0.2);
+    }
+
+    .back-to-top-button {
+      border: 0;
+      background: linear-gradient(135deg, #f97316, #dc2626);
+      box-shadow: 0 14px 28px rgba(220, 38, 38, 0.22);
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .footer-actions {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 12px;
+      margin-left: auto;
+      pointer-events: auto;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .story-layout,
+      .body-layout,
+      .pattern-grid,
+      .example-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pattern-grid .sub-card:first-child {
+        grid-column: auto;
+      }
+    }
+
+    @media (max-width: 760px) {
+      html {
+        font-size: 18px;
+      }
+
+      .page {
+        width: min(100% - 18px, 100%);
+        padding: 14px 0 30px;
+      }
+
+      .hero,
+      .part-card,
+      .sub-card,
+      .story-box,
+      .word-card,
+      .diagram-frame,
+      .grammar-table,
+      .example-card {
+        padding: 16px;
+        border-radius: 28px;
+      }
+
+      .hero-grid {
+        gap: 16px;
+        grid-template-columns: 1fr;
+      }
+
+      .part-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .hero-links,
+      .part-links {
+        flex-direction: column;
+      }
+
+      .jump-link,
+      .audio-chip {
+        width: 100%;
+      }
+
+      .game-link {
+        width: 100%;
+        min-height: 58px;
+        font-size: 1.12rem;
+      }
+
+      .page-footer {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        gap: 10px;
+      }
+
+      .footer-link,
+      .back-to-top-button {
+        width: auto;
+        min-height: 48px;
+        padding: 11px 16px;
+        font-size: 0.96rem;
+      }
+
+      .word-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .word-card {
+        grid-template-columns: minmax(60px, 0.9fr) minmax(82px, 1fr) minmax(40px, 0.5fr) 38px;
+        gap: 6px;
+      }
+
+      .word-card-actions {
+        justify-content: flex-end;
+      }
+
+      .word-card strong {
+        font-size: 1.04rem;
+      }
+
+      .word-card .pronunciation,
+      .word-card span {
+        font-size: 0.92rem;
+      }
+
+      .pronounce-button {
+        width: 38px;
+        height: 38px;
+      }
+
+      .pronounce-icon {
+        width: 18px;
+        height: 18px;
+      }
+
+      .grammar-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 14px 0;
+      }
+
+      .grammar-row-header {
+        display: none;
+      }
+
+      .grammar-cell {
+        display: grid;
+        grid-template-columns: minmax(64px, 82px) minmax(0, 1fr);
+        gap: 12px;
+        align-items: start;
+      }
+
+      .grammar-cell::before {
+        content: attr(data-label);
+        color: var(--teal);
+        font-size: 0.94rem;
+        font-weight: 900;
+        line-height: 1.4;
+      }
+
+      #part4 h3 {
+        font-size: 1.68rem;
+      }
+
+      #part3 h3 {
+        font-size: 1.68rem;
+      }
+
+      #part3 .story-text,
+      #part3 .translation,
+      #part3 .sentence,
+      #part3 .question-item h4 {
+        font-size: 1.24rem;
+      }
+
+      #part4 .grammar-point,
+      #part4 .grammar-cell,
+      #part4 .bullet-list {
+        font-size: 1.24rem;
+      }
+
+      #part4 .grammar-row strong,
+      #part4 .grammar-cell::before {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page" id="top">
+    <header class="hero">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <h1>TalkBetter Week 15</h1>
+        </div>
+      </div>
+    </header>
+
+    <div class="parts">
+      <section class="part-card" id="part1">
+        <div class="part-header">
+          <div class="part-title">
+            <h2>Part 1 螞蟻部位</h2>
+          </div>
+        </div>
+
+        <div class="part-main">
+          <div class="body-layout">
+            <article class="diagram-frame">
+              <img src="3.png" alt="Ant body parts labeled with English and Chinese words.">
+            </article>
+
+            <article class="sub-card">
+              <div class="word-grid">
+                <div class="word-card">
+                  <strong>Eyes</strong>
+                  <span class="pronunciation">/aɪz/</span>
+                  <span>眼睛</span>
+                  <div class="word-card-actions">
+                    <button class="pronounce-button" type="button" data-word="Eyes" aria-label="播放 Eyes 發音">
+                      <svg class="pronounce-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 10v4h4l5 4V6L7 10H3zm12.5 2a3.5 3.5 0 0 0-2.1-3.2v6.4a3.5 3.5 0 0 0 2.1-3.2zm0-7.3v2.1a7 7 0 0 1 0 10.4v2.1a9 9 0 0 0 0-14.6z"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="word-card">
+                  <strong>Antennae</strong>
+                  <span class="pronunciation">/ænˈtɛniː/</span>
+                  <span>觸角</span>
+                  <div class="word-card-actions">
+                    <button class="pronounce-button" type="button" data-word="Antennae" aria-label="播放 Antennae 發音">
+                      <svg class="pronounce-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 10v4h4l5 4V6L7 10H3zm12.5 2a3.5 3.5 0 0 0-2.1-3.2v6.4a3.5 3.5 0 0 0 2.1-3.2zm0-7.3v2.1a7 7 0 0 1 0 10.4v2.1a9 9 0 0 0 0-14.6z"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="word-card">
+                  <strong>Head</strong>
+                  <span class="pronunciation">/hɛd/</span>
+                  <span>頭部</span>
+                  <div class="word-card-actions">
+                    <button class="pronounce-button" type="button" data-word="Head" aria-label="播放 Head 發音">
+                      <svg class="pronounce-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 10v4h4l5 4V6L7 10H3zm12.5 2a3.5 3.5 0 0 0-2.1-3.2v6.4a3.5 3.5 0 0 0 2.1-3.2zm0-7.3v2.1a7 7 0 0 1 0 10.4v2.1a9 9 0 0 0 0-14.6z"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="word-card">
+                  <strong>Thorax</strong>
+                  <span class="pronunciation">/ˈθɔːræks/</span>
+                  <span>胸部</span>
+                  <div class="word-card-actions">
+                    <button class="pronounce-button" type="button" data-word="Thorax" aria-label="播放 Thorax 發音">
+                      <svg class="pronounce-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 10v4h4l5 4V6L7 10H3zm12.5 2a3.5 3.5 0 0 0-2.1-3.2v6.4a3.5 3.5 0 0 0 2.1-3.2zm0-7.3v2.1a7 7 0 0 1 0 10.4v2.1a9 9 0 0 0 0-14.6z"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="word-card">
+                  <strong>Abdomen</strong>
+                  <span class="pronunciation">/ˈæbdəmən/</span>
+                  <span>腹部</span>
+                  <div class="word-card-actions">
+                    <button class="pronounce-button" type="button" data-word="Abdomen" aria-label="播放 Abdomen 發音">
+                      <svg class="pronounce-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 10v4h4l5 4V6L7 10H3zm12.5 2a3.5 3.5 0 0 0-2.1-3.2v6.4a3.5 3.5 0 0 0 2.1-3.2zm0-7.3v2.1a7 7 0 0 1 0 10.4v2.1a9 9 0 0 0 0-14.6z"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="word-card">
+                  <strong>Legs</strong>
+                  <span class="pronunciation">/lɛgz/</span>
+                  <span>腿</span>
+                  <div class="word-card-actions">
+                    <button class="pronounce-button" type="button" data-word="Legs" aria-label="播放 Legs 發音">
+                      <svg class="pronounce-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 10v4h4l5 4V6L7 10H3zm12.5 2a3.5 3.5 0 0 0-2.1-3.2v6.4a3.5 3.5 0 0 0 2.1-3.2zm0-7.3v2.1a7 7 0 0 1 0 10.4v2.1a9 9 0 0 0 0-14.6z"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="part-card" id="part2">
+        <div class="part-header">
+          <div class="part-title">
+            <h2>Part 2 三個主題句型：描述昆蟲</h2>
+          </div>
+          <div class="part-actions">
+            <button class="audio-chip" data-play-section="part2" data-state="ready" type="button">播放句型</button>
+          </div>
+        </div>
+
+        <div class="part-main">
+          <div class="pair-grid">
+            <article class="pair-card">
+              <p class="pair-heading">介紹這是什麼</p>
+              <div class="qa-block">
+                <span class="sentence">Describe the ant.</span>
+                <span class="translation">描述這隻螞蟻。</span>
+              </div>
+              <div class="qa-block">
+                <span class="sentence">This is an ant.</span>
+                <span class="translation">這是一隻螞蟻。</span>
+              </div>
+            </article>
+
+            <article class="pair-card">
+              <p class="pair-heading">詢問身體部位</p>
+              <div class="qa-block">
+                <span class="prompt">What body part does it have?</span>
+                <span class="translation">它有什麼身體部位？</span>
+              </div>
+              <div class="qa-block">
+                <span class="sentence">It has six legs and antennae.</span>
+                <span class="translation">牠有六隻腳和觸角。</span>
+              </div>
+              <div class="qa-block">
+                <span class="sentence">Ants have six legs and antennae.</span>
+                <span class="translation">螞蟻有六隻腳和觸角。</span>
+              </div>
+              <div class="qa-block">
+                <span class="sentence">It has a head, a thorax, and an abdomen.</span>
+                <span class="translation">牠有頭、胸部和腹部。</span>
+              </div>
+              <div class="qa-block">
+                <span class="sentence">A bee has wings and a stinger.</span>
+                <span class="translation">蜜蜂有翅膀和螫針。</span>
+              </div>
+              <div class="qa-block">
+                <span class="sentence">Butterflies have colorful wings.</span>
+                <span class="translation">蝴蝶有彩色的翅膀。</span>
+              </div>
+            </article>
+
+            <article class="pair-card">
+              <p class="pair-heading">詢問棲息地</p>
+              <div class="qa-block">
+                <span class="prompt">Where does it live?</span>
+                <span class="translation">它住在哪裡？</span>
+              </div>
+              <div class="qa-block">
+                <span class="sentence">It lives in an anthill.</span>
+                <span class="translation">牠住在蟻丘裡。</span>
+              </div>
+              <div class="qa-block">
+                <span class="sentence">Ants live in anthills.</span>
+                <span class="translation">螞蟻住在蟻丘裡。</span>
+              </div>
+              <div class="qa-block">
+                <span class="sentence">It lives under the ground.</span>
+                <span class="translation">牠住在地底下。</span>
+              </div>
+              <div class="qa-block">
+                <span class="sentence">Bees live in hives.</span>
+                <span class="translation">蜜蜂住在蜂巢裡。</span>
+              </div>
+              <div class="qa-block">
+                <span class="sentence">Spiders live in webs.</span>
+                <span class="translation">蜘蛛住在蜘蛛網上。</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="part-card" id="part3">
+        <div class="part-header">
+          <div class="part-title">
+            <h2>Part 3 故事 + 螞蟻問答</h2>
+          </div>
+          <div class="part-actions">
+            <button class="audio-chip" data-play-section="part3" data-state="ready" type="button">播放故事問答</button>
+          </div>
+        </div>
+
+        <div class="part-main">
+          <div class="story-layout">
+            <article class="story-box">
+              <h3 style="margin-top: 10px;">Andy the Busy Ant</h3>
+              <p class="story-text">Andy is a little ant. He is always busy and loves to work hard. Every day, Andy looks for food to bring back to the ant hill. He carries crumbs, seeds, and tiny leaves on his back. Andy and his ant friends work together as a team. They help each other find food and build their home. Andy feels happy when he is busy and helping his friends.</p>
+              <p class="translation">Andy 是一隻小螞蟻。牠總是很忙，而且喜歡努力工作。每天，Andy 都會去找食物，再把食物帶回蟻丘。牠會把麵包屑、種子和小葉子背在背上。Andy 和牠的螞蟻朋友們像團隊一樣一起工作。牠們彼此幫忙找食物，也一起蓋自己的家。當 Andy 很忙並且幫助朋友時，牠覺得很開心。</p>
+            </article>
+
+            <div class="question-list">
+              <article class="question-item">
+                <h4>Question 1 螞蟻叫什麼名字？</h4>
+                <span class="sentence">What is the name of the ant?</span>
+                <span class="translation">Answer: The name of the ant is Andy.</span>
+              </article>
+
+              <article class="question-item">
+                <h4>Question 2 Andy 每天找什麼？</h4>
+                <span class="sentence">What does Andy look for every day?</span>
+                <span class="translation">Answer: Andy looks for food every day.</span>
+              </article>
+
+              <article class="question-item">
+                <h4>Question 3 他把食物帶去哪裡？</h4>
+                <span class="sentence">Where does Andy take the food he finds?</span>
+                <span class="translation">Answer: He takes the food back to the ant hill.</span>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="part-card" id="part4">
+        <div class="part-header">
+          <div class="part-title">
+            <h2>Part 4 文法重點：頻率副詞</h2>
+          </div>
+          <div class="part-actions">
+            <button class="audio-chip" data-play-section="part4" data-state="ready" type="button">播放文法重點</button>
+          </div>
+        </div>
+
+        <div class="part-main">
+          <article class="sub-card">
+            <h3>Adverbs of Frequency</h3>
+            <p class="grammar-point">頻率副詞告訴我們某件事情發生的頻率有多高。</p>
+          </article>
+
+          <article class="grammar-table">
+            <div class="grammar-row grammar-row-header">
+              <strong>副詞</strong>
+              <strong>意思</strong>
+              <strong>頻率</strong>
+            </div>
+            <div class="grammar-row">
+              <span class="grammar-cell" data-label="副詞">always</span>
+              <span class="grammar-cell" data-label="意思">總是</span>
+              <span class="grammar-cell" data-label="頻率">100% 一直都會發生</span>
+            </div>
+            <div class="grammar-row">
+              <span class="grammar-cell" data-label="副詞">sometimes</span>
+              <span class="grammar-cell" data-label="意思">有時候</span>
+              <span class="grammar-cell" data-label="頻率">50% 偶爾發生</span>
+            </div>
+            <div class="grammar-row">
+              <span class="grammar-cell" data-label="副詞">never</span>
+              <span class="grammar-cell" data-label="意思">從不</span>
+              <span class="grammar-cell" data-label="頻率">0% 完全不發生</span>
+            </div>
+          </article>
+
+          <div class="example-grid">
+            <article class="example-card">
+              <h3>Original Examples</h3>
+              <ul class="bullet-list">
+                <li>I never eat spiders. 我從不吃蜘蛛。</li>
+                <li>I sometimes play soccer. 我有時候踢足球。</li>
+                <li>I always brush my teeth. 我總是刷牙。</li>
+              </ul>
+            </article>
+
+            <article class="example-card">
+              <h3>Ant Theme Examples</h3>
+              <ul class="bullet-list">
+                <li>Ants always work together. 螞蟻總是一起合作。</li>
+                <li>Ants sometimes go inside our house. 螞蟻有時候會跑進我們家裡。</li>
+                <li>Ants never fly like birds. 螞蟻從不像鳥一樣飛。</li>
+                <li>I always wash my hands before I eat. 我吃飯前總是洗手。</li>
+                <li>She sometimes sees ants on the ground. 她有時候會在地上看到螞蟻。</li>
+                <li>We never hurt little bugs. 我們從不傷害小蟲子。</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="part-card" id="part5">
+        <div class="part-header">
+          <div class="part-title">
+            <h2>Part 5 打螞蟻學單字</h2>
+          </div>
+        </div>
+
+        <div class="part-main">
+          <article class="sub-card">
+            <h3>Whack the Ant</h3>
+            <p class="grammar-point">點下面按鈕進入打螞蟻學單字。</p>
+            <a class="game-link" href="whack-ant.html" style="margin-top: 14px;">開啟遊戲</a>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <div class="page-footer">
+      <a class="footer-link" href="https://talkbetter.github.io/D/">回導覽頁</a>
+      <div class="footer-actions">
+        <button class="back-to-top-button" id="backToTopButton" type="button">回到上方</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const pronunciationButtons = document.querySelectorAll(".pronounce-button");
+    const backToTopButton = document.getElementById("backToTopButton");
+    const sectionAudioConfig = [
+      { id: "part2", shortLabel: "句型", defaultLabel: "播放句型", file: "02-part2-patterns.mp3" },
+      { id: "part3", shortLabel: "故事問答", defaultLabel: "播放故事問答", file: "03-part3-story-and-qa.mp3" },
+      { id: "part4", shortLabel: "文法重點", defaultLabel: "播放文法重點", file: "04-part4-grammar.mp3" }
+    ];
+    const sectionAudioMap = new Map(sectionAudioConfig.map((section) => [section.id, section]));
+    const sectionAudioButtons = new Map();
+    const sectionCards = new Map();
+    const sectionAudioAvailability = new Map(sectionAudioConfig.map((section) => [section.id, false]));
+    const sectionPlayer = new Audio();
+    sectionPlayer.preload = "metadata";
+
+    let currentSectionAudioId = null;
+
+    document.querySelectorAll("[data-play-section]").forEach((button) => {
+      sectionAudioButtons.set(button.dataset.playSection, button);
+    });
+
+    sectionAudioConfig.forEach((section) => {
+      const card = document.getElementById(section.id);
+      if (card) {
+        sectionCards.set(section.id, card);
+      }
+    });
+
+    function pickEnglishVoice() {
+      const voices = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+      return voices.find((voice) => voice.lang && voice.lang.toLowerCase().startsWith("en")) || null;
+    }
+
+    function getSectionAudioSource(section) {
+      return `audio/${section.file}`;
+    }
+
+    function clearSectionCardState(sectionId) {
+      const card = sectionCards.get(sectionId);
+      if (!card) return;
+      card.classList.remove("is-playing", "is-paused");
+    }
+
+    function setSectionPlayingState(sectionId) {
+      const card = sectionCards.get(sectionId);
+      if (!card) return;
+      card.classList.add("is-playing");
+      card.classList.remove("is-paused");
+    }
+
+    function setSectionPausedState(sectionId) {
+      const card = sectionCards.get(sectionId);
+      if (!card) return;
+      card.classList.add("is-paused");
+      card.classList.remove("is-playing");
+    }
+
+    function updateSectionAudioButtons() {
+      sectionAudioConfig.forEach((section) => {
+        const button = sectionAudioButtons.get(section.id);
+        if (!button) return;
+
+        const ready = sectionAudioAvailability.get(section.id);
+        let label = section.defaultLabel;
+        let state = ready ? "ready" : "missing";
+
+        if (currentSectionAudioId === section.id) {
+          if (sectionPlayer.paused) {
+            label = `繼續${section.shortLabel}`;
+            state = "paused";
+          } else {
+            label = `暫停${section.shortLabel}`;
+            state = "playing";
+          }
+        } else if (!ready) {
+          label = `${section.shortLabel} 無音檔`;
+        }
+
+        button.textContent = label;
+        button.dataset.state = state;
+        button.disabled = !ready;
+      });
+    }
+
+    function stopSectionAudio() {
+      sectionPlayer.pause();
+      sectionPlayer.removeAttribute("src");
+      sectionPlayer.load();
+      sectionAudioConfig.forEach((section) => clearSectionCardState(section.id));
+      currentSectionAudioId = null;
+      updateSectionAudioButtons();
+    }
+
+    function onSectionAudioError(section) {
+      clearSectionCardState(section.id);
+      sectionAudioAvailability.set(section.id, false);
+      currentSectionAudioId = null;
+      updateSectionAudioButtons();
+    }
+
+    function startSectionAudio(section) {
+      if (!sectionAudioAvailability.get(section.id)) {
+        return;
+      }
+
+      if (currentSectionAudioId && currentSectionAudioId !== section.id) {
+        clearSectionCardState(currentSectionAudioId);
+      }
+
+      currentSectionAudioId = section.id;
+      setSectionPlayingState(section.id);
+      sectionPlayer.pause();
+      sectionPlayer.src = getSectionAudioSource(section);
+      sectionPlayer.currentTime = 0;
+
+      const playPromise = sectionPlayer.play();
+      if (playPromise && typeof playPromise.catch === "function") {
+        playPromise.catch(() => {
+          onSectionAudioError(section);
+        });
+      }
+
+      updateSectionAudioButtons();
+    }
+
+    function resumeSectionAudio(section) {
+      if (!section || currentSectionAudioId !== section.id) return;
+      setSectionPlayingState(section.id);
+
+      const playPromise = sectionPlayer.play();
+      if (playPromise && typeof playPromise.catch === "function") {
+        playPromise.catch(() => {
+          onSectionAudioError(section);
+        });
+      }
+
+      updateSectionAudioButtons();
+    }
+
+    function toggleSectionAudio(sectionId) {
+      const section = sectionAudioMap.get(sectionId);
+      if (!section || !sectionAudioAvailability.get(section.id)) return;
+
+      if (currentSectionAudioId === section.id) {
+        if (sectionPlayer.paused) {
+          resumeSectionAudio(section);
+        } else {
+          sectionPlayer.pause();
+          setSectionPausedState(section.id);
+          updateSectionAudioButtons();
+        }
+        return;
+      }
+
+      startSectionAudio(section);
+    }
+
+    function probeAudioSource(src) {
+      return new Promise((resolve) => {
+        const probe = new Audio();
+        let settled = false;
+
+        function finish(result) {
+          if (settled) return;
+          settled = true;
+          probe.removeAttribute("src");
+          probe.load();
+          resolve(result);
+        }
+
+        probe.preload = "metadata";
+        probe.src = src;
+        probe.addEventListener("canplaythrough", () => finish(true), { once: true });
+        probe.addEventListener("loadedmetadata", () => finish(true), { once: true });
+        probe.addEventListener("error", () => finish(false), { once: true });
+
+        setTimeout(() => finish(false), 2500);
+      });
+    }
+
+    async function detectSectionAudio() {
+      await Promise.all(sectionAudioConfig.map(async (section) => {
+        const ok = await probeAudioSource(getSectionAudioSource(section));
+        sectionAudioAvailability.set(section.id, ok);
+      }));
+
+      updateSectionAudioButtons();
+    }
+
+    function speakWord(word) {
+      if (!("speechSynthesis" in window)) {
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(word);
+      utterance.lang = "en-US";
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
+
+      const voice = pickEnglishVoice();
+      if (voice) {
+        utterance.voice = voice;
+      }
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    pronunciationButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        speakWord(button.dataset.word);
+      });
+    });
+
+    sectionAudioButtons.forEach((button, sectionId) => {
+      button.addEventListener("click", () => {
+        toggleSectionAudio(sectionId);
+      });
+    });
+
+    if (backToTopButton) {
+      backToTopButton.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+
+    sectionPlayer.addEventListener("ended", () => {
+      if (currentSectionAudioId) {
+        clearSectionCardState(currentSectionAudioId);
+      }
+      currentSectionAudioId = null;
+      updateSectionAudioButtons();
+    });
+
+    sectionPlayer.addEventListener("error", () => {
+      const section = currentSectionAudioId ? sectionAudioMap.get(currentSectionAudioId) : null;
+      if (!section) {
+        updateSectionAudioButtons();
+        return;
+      }
+      onSectionAudioError(section);
+    });
+
+    if (!("speechSynthesis" in window)) {
+      pronunciationButtons.forEach((button) => {
+        button.disabled = true;
+      });
+    } else if (typeof window.speechSynthesis.onvoiceschanged !== "undefined") {
+      window.speechSynthesis.onvoiceschanged = () => {
+        pickEnglishVoice();
+      };
+    }
+
+    detectSectionAudio();
+  </script>
+</body>
+</html>
