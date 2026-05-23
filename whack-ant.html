@@ -260,30 +260,6 @@ body {
   padding: 8px 18px;
 }
 
-.prompt-actions {
-  display: flex;
-  justify-content: center;
-  margin-top: 6px;
-}
-
-.replay-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-size: 1.3rem;
-  background: rgba(255,255,255,0.9);
-  border: 3px solid var(--brown);
-  border-radius: 14px;
-  padding: 10px 28px;
-  cursor: pointer;
-  font-weight: 700;
-  color: var(--brown-dark);
-  margin-top: 6px;
-  transition: transform 0.1s;
-}
-.replay-btn:active { transform: scale(0.95); }
-
 /* ===== Holes Grid ===== */
 .holes-container {
   display: flex;
@@ -634,7 +610,6 @@ body {
 }
 
 @media (max-width: 640px) {
-  .replay-btn { font-size: 1.05rem; padding: 8px 18px; }
   .word-sign.level-three { min-width: clamp(94px, 28vw, 118px); }
   .word-sign.level-three .word-en { font-size: clamp(1rem, 4.1vw, 1.15rem); }
   .word-sign.level-three .word-zh { font-size: clamp(0.86rem, 3.3vw, 0.98rem); }
@@ -815,6 +790,8 @@ let audioCtx = null;
 let preferredEnglishVoice = null;
 let speechPrimed = false;
 let speechRetryTimer = null;
+const IS_IOS_SAFARI_SPEECH = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
 function getAudioCtx() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -834,6 +811,7 @@ function primeSpeechSynthesis() {
   try {
     const synth = window.speechSynthesis;
     synth.cancel();
+    synth.resume();
 
     const unlock = new SpeechSynthesisUtterance('.');
     unlock.volume = 0;
@@ -909,6 +887,7 @@ function speakWord(word, allowRetry = true) {
 
     const synth = window.speechSynthesis;
     synth.cancel();
+    synth.resume();
 
     const u = new SpeechSynthesisUtterance(word);
     u.lang = 'en-US';
@@ -933,12 +912,6 @@ function speakWord(word, allowRetry = true) {
   } catch (e) {
     return false;
   }
-}
-
-function replayCurrentWord() {
-  if (!game.currentTarget) return;
-  primeSpeechSynthesis();
-  speakWord(game.currentTarget.en);
 }
 
 function renderWordSign(signEl, word, bilingual) {
@@ -1090,7 +1063,8 @@ function startGame() {
   startLevel(1);
 }
 
-function startLevel(level) {
+function startLevel(level, options = {}) {
+  const { skipIntroOverlay = false } = options;
   game.level = level;
   game.lives = 3;
   game.combo = 0;
@@ -1106,6 +1080,11 @@ function startLevel(level) {
   updateHearts();
   buildHoles();
   updateProgress();
+
+  if (skipIntroOverlay) {
+    nextQuestion();
+    return;
+  }
 
   showInstructionOverlay(level, () => {
     setTimeout(() => nextQuestion(), 400);
@@ -1152,7 +1131,9 @@ function showLevelTransition(completedLevel) {
   document.getElementById('next-level-btn').addEventListener('click', () => {
     primeSpeechSynthesis();
     overlay.remove();
-    startLevel(nextLevel);
+    startLevel(nextLevel, {
+      skipIntroOverlay: nextLevel === 3 && IS_IOS_SAFARI_SPEECH
+    });
   });
 }
 
@@ -1176,16 +1157,10 @@ function nextQuestion() {
   if (game.level === 3) {
     promptArea.innerHTML = `
       <div class="prompt-label">聽發音，點選正確的螞蟻</div>
-      <div class="prompt-word audio-mode">🔊 聽題目作答</div>
-      <div class="prompt-actions">
-        <button class="replay-btn" id="replay-btn" type="button">🔊 再聽一次</button>
-      </div>
+      <div class="prompt-word audio-mode">🔊 單字會自動播放</div>
     `;
-    document.getElementById('replay-btn').addEventListener('click', replayCurrentWord);
-    setTimeout(() => {
-      primeSpeechSynthesis();
-      speakWord(target.en);
-    }, 250);
+    primeSpeechSynthesis();
+    speakWord(target.en);
   } else {
     promptArea.innerHTML = `
       <div class="prompt-label">找出這個單字的英文</div>
