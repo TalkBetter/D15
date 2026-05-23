@@ -254,7 +254,23 @@ body {
   border-radius: 16px;
 }
 
+.prompt-word.audio-mode {
+  font-size: clamp(1rem, 3.2vw, 1.35rem);
+  letter-spacing: 0.12em;
+  padding: 8px 18px;
+}
+
+.prompt-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 6px;
+}
+
 .replay-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   font-size: 1.3rem;
   background: rgba(255,255,255,0.9);
   border: 3px solid var(--brown);
@@ -321,6 +337,28 @@ body {
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
   transition: background 0.2s, border-color 0.2s, transform 0.2s;
   white-space: nowrap;
+  line-height: 1.05;
+}
+
+.word-sign.level-three {
+  min-width: clamp(92px, 27vw, 132px);
+  min-height: 60px;
+  padding: 8px 10px;
+  flex-direction: column;
+  gap: 2px;
+  white-space: normal;
+}
+
+.word-sign.level-three .word-en {
+  display: block;
+  font-size: clamp(1rem, 3.5vw, 1.3rem);
+  font-weight: 900;
+}
+
+.word-sign.level-three .word-zh {
+  display: block;
+  font-size: clamp(0.82rem, 2.7vw, 1rem);
+  font-weight: 700;
 }
 
 .ant-wrapper:hover .word-sign { transform: scale(1.05); border-color: var(--orange); }
@@ -580,15 +618,26 @@ body {
   .prompt-area { margin-top: 2px; min-height: 44px; }
   .prompt-label { font-size: 0.75rem; margin-bottom: 0; }
   .prompt-word { font-size: 1.4rem; padding: 2px 14px; }
+  .prompt-word.audio-mode { font-size: 0.9rem; padding: 5px 12px; }
   .timer-bar-container { margin-top: 4px; height: 5px; }
   .holes-container { margin-top: 4px; gap: 4px 6px; }
   .hole { height: clamp(90px, 20vw, 130px); }
   .ant-wrapper { bottom: 26px; }
   .word-sign { padding: 4px 8px; min-height: 36px; font-size: clamp(0.95rem, 3vw, 1.2rem); }
+  .word-sign.level-three { min-height: 48px; padding: 4px 6px; gap: 1px; }
+  .word-sign.level-three .word-en { font-size: clamp(0.84rem, 2.7vw, 1rem); }
+  .word-sign.level-three .word-zh { font-size: clamp(0.68rem, 2.1vw, 0.82rem); }
   .ant-emoji { font-size: 1.3rem; }
   .mound { height: 28px; }
   .progress-bar { margin-top: 4px; }
   .progress-dot { width: 10px; height: 10px; }
+}
+
+@media (max-width: 640px) {
+  .replay-btn { font-size: 1.05rem; padding: 8px 18px; }
+  .word-sign.level-three { min-width: clamp(94px, 28vw, 118px); }
+  .word-sign.level-three .word-en { font-size: clamp(1rem, 4.1vw, 1.15rem); }
+  .word-sign.level-three .word-zh { font-size: clamp(0.86rem, 3.3vw, 0.98rem); }
 }
 
 @media (min-width: 700px) {
@@ -763,10 +812,40 @@ const PARTICLE_COLORS = ['#FFD700','#FF6B6B','#4ECDC4','#45B7D1','#96E6A1','#FF9
 
 let game = {};
 let audioCtx = null;
+let preferredEnglishVoice = null;
+let speechPrimed = false;
+let speechRetryTimer = null;
 
 function getAudioCtx() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   return audioCtx;
+}
+
+function pickEnglishVoice() {
+  if (!('speechSynthesis' in window)) return null;
+  const voices = window.speechSynthesis.getVoices();
+  preferredEnglishVoice = voices.find(voice => voice.lang && voice.lang.toLowerCase().startsWith('en')) || null;
+  return preferredEnglishVoice;
+}
+
+function primeSpeechSynthesis() {
+  if (!('speechSynthesis' in window) || speechPrimed) return;
+
+  try {
+    const synth = window.speechSynthesis;
+    synth.cancel();
+
+    const unlock = new SpeechSynthesisUtterance('.');
+    unlock.volume = 0;
+    unlock.rate = 1;
+    unlock.pitch = 1;
+
+    const voice = pickEnglishVoice();
+    if (voice) unlock.voice = voice;
+
+    synth.speak(unlock);
+    speechPrimed = true;
+  } catch (e) {}
 }
 
 function playSound(type) {
@@ -822,13 +901,64 @@ function playSound(type) {
   } catch (e) {}
 }
 
-function speakWord(word) {
-  if (!('speechSynthesis' in window)) return;
-  speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(word);
-  u.lang = 'en-US';
-  u.rate = 0.75;
-  speechSynthesis.speak(u);
+function speakWord(word, allowRetry = true) {
+  if (!('speechSynthesis' in window)) return false;
+
+  try {
+    clearTimeout(speechRetryTimer);
+
+    const synth = window.speechSynthesis;
+    synth.cancel();
+
+    const u = new SpeechSynthesisUtterance(word);
+    u.lang = 'en-US';
+    u.rate = 0.8;
+    u.pitch = 1;
+
+    const voice = pickEnglishVoice();
+    if (voice) u.voice = voice;
+
+    synth.speak(u);
+
+    if (allowRetry) {
+      speechRetryTimer = setTimeout(() => {
+        if (!synth.speaking && !synth.pending) {
+          primeSpeechSynthesis();
+          speakWord(word, false);
+        }
+      }, 250);
+    }
+
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function replayCurrentWord() {
+  if (!game.currentTarget) return;
+  primeSpeechSynthesis();
+  speakWord(game.currentTarget.en);
+}
+
+function renderWordSign(signEl, word, bilingual) {
+  signEl.classList.toggle('level-three', bilingual);
+  signEl.textContent = '';
+
+  if (!bilingual) {
+    signEl.textContent = word.en;
+    return;
+  }
+
+  const enEl = document.createElement('span');
+  enEl.className = 'word-en';
+  enEl.textContent = word.en;
+
+  const zhEl = document.createElement('span');
+  zhEl.className = 'word-zh';
+  zhEl.textContent = word.zh;
+
+  signEl.append(enEl, zhEl);
 }
 
 function shuffle(arr) {
@@ -938,6 +1068,7 @@ function buildQuestionQueue(level) {
 /* ===== Game Flow ===== */
 
 function startGame() {
+  primeSpeechSynthesis();
   game = {
     level: 1,
     score: 0,
@@ -1019,6 +1150,7 @@ function showLevelTransition(completedLevel) {
   `;
   document.body.appendChild(overlay);
   document.getElementById('next-level-btn').addEventListener('click', () => {
+    primeSpeechSynthesis();
     overlay.remove();
     startLevel(nextLevel);
   });
@@ -1043,10 +1175,17 @@ function nextQuestion() {
   const promptArea = document.getElementById('prompt-area');
   if (game.level === 3) {
     promptArea.innerHTML = `
-      <div class="prompt-label">聽發音，找中文</div>
-      <div class="prompt-word">🔊</div>
+      <div class="prompt-label">聽發音，點選正確的螞蟻</div>
+      <div class="prompt-word audio-mode">🔊 聽題目作答</div>
+      <div class="prompt-actions">
+        <button class="replay-btn" id="replay-btn" type="button">🔊 再聽一次</button>
+      </div>
     `;
-    setTimeout(() => speakWord(target.en), 300);
+    document.getElementById('replay-btn').addEventListener('click', replayCurrentWord);
+    setTimeout(() => {
+      primeSpeechSynthesis();
+      speakWord(target.en);
+    }, 250);
   } else {
     promptArea.innerHTML = `
       <div class="prompt-label">找出這個單字的英文</div>
@@ -1071,7 +1210,7 @@ function nextQuestion() {
   const ants = document.querySelectorAll('.ant-wrapper');
   ants.forEach((ant, i) => {
     ant.classList.remove('show', 'correct-hit', 'wrong-hit');
-    ant.querySelector('.word-sign').textContent = game.level === 3 ? options[i].en + ' ' + options[i].zh : options[i].en;
+    renderWordSign(ant.querySelector('.word-sign'), options[i], game.level === 3);
   });
 
   setTimeout(() => {
@@ -1276,6 +1415,17 @@ function showFinalResults() {
   document.getElementById('nameInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') Leaderboard.submit(); });
 
   showScreen('result-screen');
+}
+
+if ('speechSynthesis' in window) {
+  pickEnglishVoice();
+
+  if (typeof window.speechSynthesis.onvoiceschanged !== 'undefined') {
+    window.speechSynthesis.onvoiceschanged = () => pickEnglishVoice();
+  }
+
+  document.addEventListener('pointerdown', primeSpeechSynthesis, { once: true });
+  document.addEventListener('touchstart', primeSpeechSynthesis, { once: true, passive: true });
 }
 
 /* ===== Leaderboard ===== */
